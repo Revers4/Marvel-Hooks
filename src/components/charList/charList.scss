@@ -32,6 +32,26 @@
             box-shadow: 0 5px 20px $main-color;
             transform: translateY(-8px);
         }
+        &-enter{
+            opacity: 0; 
+        }
+        &-enter-active{
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 400ms;
+        }
+        &-enter-done{
+            opacity: 1;
+            visibility: visible;
+        }
+        &-exit{
+            opacity: 1;
+        }
+        &-exit-active{
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 400ms;
+        }
     }
     &__name {
         font-weight: bold;

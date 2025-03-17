@@ -1,12 +1,12 @@
-import CharInfo from "../components/charInfo/CharInfo";
-import CharList from "../components/charList/CharList";
-import ErrorBoundary from "../components/errorBoundary/ErrorBoundary";
-import RandomChar from "../components/randomChar/RandomChar";
+import CharInfo from "../charInfo/CharInfo";
+import CharList from "../charList/CharList";
+import ErrorBoundary from "../errorBoundary/ErrorBoundary";
+import RandomChar from "../randomChar/RandomChar";
 import { useState } from 'react';
-import decoration from '../resources/img/vision.png';
+import decoration from '../../resources/img/vision.png';
 
 
-export function MainPage() {
+export default function MainPage() {
     const [selectedId, setSelectedId] = useState(null)
 
     const ChangeId = (selectedId) => {

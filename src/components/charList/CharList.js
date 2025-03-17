@@ -1,6 +1,7 @@
 import './charList.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useMarvelServer } from '../../API/server';
+import { TransitionGroup, CSSTransition } from "react-transition-group"
 import Spinner from '../spinner/Spinner';
 import Error from '../error/Error';
 
@@ -12,13 +13,16 @@ const CharList = ({ setSelectedId }) => {
     })
     const [newItemLoading, setNewItemLoading] = useState(false)
 
-    const { loading, error, getAllChar, clearError } = useMarvelServer();
+    const { loading, error, getAllChar, clearError, getData } = useMarvelServer();
 
     useEffect(() => {
         getSomeChars(offset, true)
     }, [])
 
-    function onCharsLoaded(newData) {
+    async function onCharsLoaded(newData) {
+        // const { hello, secondHello } = await import("./TestFunc")
+        // hello()
+        // secondHello()
         let ended = newData.length < 9;
 
         setState((prev) => ({
@@ -48,6 +52,7 @@ const CharList = ({ setSelectedId }) => {
     function charsListItems( arr ) {
         const items = arr.map((char, index) => {
             let style = { objectFit: "cover" };
+            const time = 500
 
             if (
                 char.thumbnail ===
@@ -57,24 +62,29 @@ const CharList = ({ setSelectedId }) => {
             }
 
             return (
-                <li
-                    onClick={() => {
-                        setSelectedId(char.id);
-                        handleClick(index);
-                    }}
-                    ref={(elem) => refArr.current[index] = elem}
-                    key={char.id}
-                    className="char__item"
-                >
-                    <img style={style} src={char.thumbnail} alt="abyss" />
-                    <div className="char__name">{char.name}</div>
-                </li>
+                <CSSTransition
+                    key={index}
+                    timeout={time}
+                    classNames="char__item">
+                    <li
+                        onClick={() => {
+                            setSelectedId(char.id);
+                            handleClick(index);
+                        }}
+                        ref={(elem) => refArr.current[index] = elem}
+                        key={index}
+                        className="char__item"
+                    >
+                        <img style={style} src={char.thumbnail} alt="abyss" />
+                        <div className="char__name">{char.name}</div>
+                    </li>
+                </CSSTransition>
             );
         })
         return (
-            <ul className="char__grid">
+            <TransitionGroup component="ul" className="char__grid">
                 {items}
-            </ul>
+            </TransitionGroup>
         )
     }
 
@@ -82,6 +92,12 @@ const CharList = ({ setSelectedId }) => {
     spinner = loading && !newItemLoading ? <Spinner /> : null,
     errorMessage = error ? <Error /> : null,
     items = charsListItems(chars)
+
+    // if(loading){
+    //     import("./TestFunc")
+    //     .then(obj => obj.default())
+    //     .catch(console.log("Error"))
+    // }
 
     return (
         <div className="char__list">

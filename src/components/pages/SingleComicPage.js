@@ -10,15 +10,15 @@ const SingleComic = () => {
     const { loading, error, getOneComic, clearError } = useMarvelServer()
     const { comicId } = useParams()
 
-    const onCharLoaded = (char) => {
-        setComic(char)
+    const onComicLoaded = (comic) => {
+        setComic(comic)
     }
 
     const getComic = () => {
         clearError()
 
         getOneComic(comicId)
-        .then(onCharLoaded)
+        .then(onComicLoaded)
     }
 
     useEffect(() => {

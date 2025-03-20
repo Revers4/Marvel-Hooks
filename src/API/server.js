@@ -9,6 +9,14 @@ export const useMarvelServer = () => {
         const data = await request(`https://gateway.marvel.com:443/v1/public/characters/${id}?apikey=05f05a7254c7f47148993eee3927e032`)
         return transformChar(data.data.results[0])
     }
+
+    const getOneCharByName = async (name) =>{
+        const data = await request(`https://gateway.marvel.com:443/v1/public/characters?name=${name}&apikey=05f05a7254c7f47148993eee3927e032`)
+        if(data.data.results[0]){
+            return data.data.results[0]
+        }
+        throw new Error
+    }
     
     const getAllChar = async (offset) =>{
         const data = await request(`https://gateway.marvel.com:443/v1/public/characters?limit=${char_limit}&offset=${offset}&apikey=05f05a7254c7f47148993eee3927e032`)
@@ -22,7 +30,6 @@ export const useMarvelServer = () => {
 
     const getOneComic = async (comicId) => {
         const data = await request(`https://gateway.marvel.com:443/v1/public/comics/${comicId}?apikey=05f05a7254c7f47148993eee3927e032`);
-        // console.log(`Comic ID: ${comicId}`, data.data.results[0]);
         return transformComics(data.data.results[0]);
     };
 
@@ -49,6 +56,6 @@ export const useMarvelServer = () => {
         }
     }
 
-    return { loading, error, getOneChar, getAllChar, clearError, getAllComics, getOneComic }
+    return { loading, error, getOneChar, getAllChar, clearError, getAllComics, getOneComic, getOneCharByName }
 
 }

@@ -1,0 +1,35 @@
+@import '../../style/variables.scss';
+
+.char-search {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+    padding: 25px;
+    position: relative;
+    z-index: 5;
+    background-color: #fff;
+    &__find{
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 10px;
+    }
+    &__input{
+        width: 100%;
+        margin-right: 25px;
+        padding: 6px;
+        border: none;
+        box-shadow: 1px 2px 4px 3px rgba(29, 33, 36, 0.2);
+    }
+    &__answer{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__message{
+        &-success{
+            color: #2ecc71;
+        }
+        &-error{
+            color: #e74c3c;
+        }
+    }
+}

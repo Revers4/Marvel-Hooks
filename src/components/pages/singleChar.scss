@@ -1,0 +1,14 @@
+.single-char{
+    display: flex;
+    margin-top: 32px;
+    &__img{
+        max-width: 300px;
+        margin-right: 32px;
+    }
+    &__name{
+        margin-bottom: 32px;
+    }
+    &__info {
+        max-width: 560px;
+    }
+}

@@ -41,8 +41,6 @@ const SingleCharPage = () => {
 const View = ({ char }) => {
     let { name, thumbnail } = char
     let description = char.description || "Unfortunately, there is no description";
-    
-    
 
     return (
         <>

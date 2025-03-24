@@ -5,6 +5,7 @@ import RandomChar from "../randomChar/RandomChar";
 import { useState } from 'react';
 import decoration from '../../resources/img/vision.png';
 import { CharSearch } from "../charSearch/CharSearch";
+import { Helmet } from "react-helmet";
 
 
 export default function MainPage() {
@@ -17,6 +18,13 @@ export default function MainPage() {
 
     return (
         <>
+            <Helmet>
+                <meta
+                    name="description"
+                    content="Marvel information portal"
+                />
+                <title>Marvel information portal</title>
+            </Helmet>
             <ErrorBoundary>
                 <RandomChar />
             </ErrorBoundary>
@@ -25,12 +33,12 @@ export default function MainPage() {
                     <CharList setSelectedId={ChangeId} />
                 </ErrorBoundary>
                 <div>
-                <ErrorBoundary>
-                    <CharInfo selectedId={selectedId} />
-                </ErrorBoundary>
-                <ErrorBoundary>
-                    <CharSearch/>
-                </ErrorBoundary>
+                    <ErrorBoundary>
+                        <CharInfo selectedId={selectedId} />
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                        <CharSearch />
+                    </ErrorBoundary>
                 </div>
             </div>
             <img className="bg-decoration" src={decoration} alt="vision" />

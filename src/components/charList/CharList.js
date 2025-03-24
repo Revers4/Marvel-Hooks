@@ -2,8 +2,7 @@ import './charList.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useMarvelServer } from '../../API/server';
 import { TransitionGroup, CSSTransition } from "react-transition-group"
-import Spinner from '../spinner/Spinner';
-import Error from '../error/Error';
+import setContent from '../../utils/setContent';
 
 const CharList = ({ setSelectedId }) => {
     const [state, setState] = useState({
@@ -13,16 +12,13 @@ const CharList = ({ setSelectedId }) => {
     })
     const [newItemLoading, setNewItemLoading] = useState(false)
 
-    const { loading, error, getAllChar, clearError, getData } = useMarvelServer();
+    const {  getAllChar, clearError, process, setProcess } = useMarvelServer();
 
     useEffect(() => {
         getSomeChars(offset, true)
     }, [])
 
     async function onCharsLoaded(newData) {
-        // const { hello, secondHello } = await import("./TestFunc")
-        // hello()
-        // secondHello()
         let ended = newData.length < 9;
 
         setState((prev) => ({
@@ -40,6 +36,7 @@ const CharList = ({ setSelectedId }) => {
 
         getAllChar(offset)
             .then(onCharsLoaded)
+            .then(() => setProcess("confirmed"))
     }
 
     const refArr = useRef([]);
@@ -49,7 +46,7 @@ const CharList = ({ setSelectedId }) => {
         refArr.current[id].focus();
     }
 
-    function charsListItems( arr ) {
+    function charsListItems(arr) {
         const items = arr.map((char, index) => {
             let style = { objectFit: "cover" };
             const time = 500
@@ -88,22 +85,11 @@ const CharList = ({ setSelectedId }) => {
         )
     }
 
-    const { chars, offset, end } = state,
-    spinner = loading && !newItemLoading ? <Spinner /> : null,
-    errorMessage = error ? <Error /> : null,
-    items = charsListItems(chars)
-
-    // if(loading){
-    //     import("./TestFunc")
-    //     .then(obj => obj.default())
-    //     .catch(console.log("Error"))
-    // }
+    const { chars, offset, end } = state
 
     return (
         <div className="char__list">
-            {items}
-            {errorMessage}
-            {spinner}
+            {setContent(process, () => charsListItems(chars), newItemLoading)}
             <button style={{ "display": end ? "none" : "block" }} disabled={newItemLoading} onClick={() => getSomeChars(offset)} className="button button__main button__long">
                 <div className="inner">load more</div>
             </button>

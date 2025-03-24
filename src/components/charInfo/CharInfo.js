@@ -1,14 +1,12 @@
 import './charInfo.scss';
 import { useEffect, useState } from 'react';
-import Spinner from "../spinner/Spinner"
-import Error from '../error/Error';
-import Skeleton from '../skeleton/Skeleton';
 import { useMarvelServer } from '../../API/server';
+import setContent from '../../utils/setContent';
 
 const CharInfo = ({ selectedId }) => {
     const [char, setChar] = useState(null)
 
-    const { loading, error, getOneChar, clearError } = useMarvelServer();
+    const {  getOneChar, clearError, process, setProcess } = useMarvelServer();
 
     const onCharLoaded = (char) => { setChar(char) }
 
@@ -16,34 +14,29 @@ const CharInfo = ({ selectedId }) => {
         if (!selectedId) {
             return;
         }
-        if (error) { clearError() }
+
+        clearError()
 
         getOneChar(selectedId)
             .then(onCharLoaded)
+            .then(() => setProcess("confirmed"))
     };
 
     useEffect(() => {
         getChar()
     }, [selectedId])
-
-    const content = !(loading || error || !char) ? <View char={char} /> : null,
-        spinner = loading && char ? <Spinner /> : null,
-        errorMessage = error ? <Error /> : null,
-        skeleton = loading || char || error ? null : <Skeleton />
-
+    
+    
     return (
         <div className="char__info">
-            {content}
-            {skeleton}
-            {spinner}
-            {errorMessage}
+            {setContent(process, () => View(char))}
         </div>
     )
 }
 
-const View = ({ char }) => {
+const View = ({ data }) => {
 
-    let { name, description, detail, thumbnail, wiki, comics } = char
+    let { name, description, detail, thumbnail, wiki, comics } = data
 
     let style = { 'objectFit': 'cover' }
 

@@ -1,14 +1,13 @@
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import { useMarvelServer } from '../../API/server';
-import Spinner from "../spinner/Spinner"
 import { useState, useEffect } from 'react';
-import Error from '../error/Error';
+import setContent from '../../utils/setContent';
 
 
 const RandomChar = () => {
     const [char, setChar] = useState({})
-    const { loading, error, getOneChar, clearError } = useMarvelServer()
+    const { getOneChar, clearError, process, setProcess } = useMarvelServer()
 
     const onCharLoaded = (char) => {
         setChar(char)
@@ -19,22 +18,17 @@ const RandomChar = () => {
         const charId = Math.floor(Math.random() * (1011400 - 1011000)) + 1011000;
 
         getOneChar(charId)
-        .then(onCharLoaded)
+            .then(onCharLoaded)
+            .then(() => setProcess("confirmed"))
     };
 
     useEffect(() =>{
         getRandomChar()
     },[])
 
-        const spinner = loading ? <Spinner /> : null,
-            content = !(loading || error || !char) ? <View char={char} /> : null,
-            errorMessage = error ? <Error /> : null
-
         return (
             <div className="randomchar">
-                {spinner}
-                {content}
-                {errorMessage}
+                {setContent(process, () => View(char))}
                 <div className="randomchar__static">
                     <p className="randomchar__title">
                         Random character for today!<br />

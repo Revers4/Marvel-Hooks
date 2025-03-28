@@ -2,13 +2,13 @@ import './singleChar.scss';
 import { useParams } from "react-router-dom";
 import { useMarvelServer } from '../../API/server';
 import { useEffect, useState } from 'react';
-import Error from '../error/Error';
-import Spinner from '../spinner/Spinner';
 import AppBanner from '../appBanner/AppBanner';
+import { Helmet } from 'react-helmet';
+import setContent from '../../utils/setContent';
 
 const SingleCharPage = () => {
     const [char, setChar] = useState(null)
-    const { loading, error, getOneChar, clearError } = useMarvelServer()
+    const { getOneChar, clearError, process, setProcess } = useMarvelServer()
     const { charId } = useParams()
 
     const onCharLoaded = (char) => {
@@ -20,19 +20,14 @@ const SingleCharPage = () => {
 
         getOneChar(charId)
             .then(onCharLoaded)
+            .then(() => setProcess("confirmed"))
     }, [charId]);
-
-    const spinner = loading ? <Spinner /> : null,
-        content = !(loading || error || !char) ? <View char={char} /> : null,
-        errorMessage = error ? <Error /> : null
 
     return (
         <>
             <AppBanner />
             <div className="single-char">
-                {content}
-                {spinner}
-                {errorMessage}
+                {setContent(process, () => View(char))}
             </div>
         </>
     )
@@ -44,6 +39,10 @@ const View = ({ char }) => {
 
     return (
         <>
+            <Helmet>
+                <meta name="description" content={`Discover detailed information about ${name} from the Marvel universe. Learn about their story, abilities, and appearances in comics.`} />
+                <title>{name} | Marvel Information Portal</title>
+            </Helmet>
             <img src={thumbnail} alt="x-men" className="single-char__img"/>
             <div className="single-char__info">
                 <h2 className='single-char__name'>{name}</h2>
